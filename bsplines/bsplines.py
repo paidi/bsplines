@@ -16,7 +16,7 @@ class BSplineBasis:
     def design_matrix(self, x):
         x = np.atleast_1d(x)
         cols = self._basis(x)
-        return np.array(cols).T
+        return np.array(cols)
 
     def __repr__(self):
         s = 'BSplineBasis(lower={}, upper={}, n_bases={}, degree={})'
@@ -37,7 +37,7 @@ class QuantileBSplineBasis:
     def design_matrix(self, x):
         x = np.atleast_1d(x)
         cols = self._basis(x)
-        return np.array(cols).T
+        return np.array(cols)
 
     def __repr__(self):
         s = 'QuantileBSplineBasis(lower={}, upper={}, n_bases={}, degree={})'
