@@ -11,11 +11,11 @@ class BSplineBasis:
         self.degree = degree
 
         self._knots = compute_uniform_knots(lower, upper, n_bases, degree)
-        self._tck = BSpline(self._knots, np.eye(n_bases), degree)
+        self._basis = BSpline(self._knots, np.eye(n_bases), degree)
 
     def design_matrix(self, x):
         x = np.atleast_1d(x)
-        cols = splev(x, self._tck)
+        cols = self._basis(x)
         return np.array(cols).T
 
     def __repr__(self):
@@ -32,11 +32,11 @@ class QuantileBSplineBasis:
         self.degree = degree
 
         self._knots = compute_quantile_knots(lower, upper, x, n_bases, degree)
-        self._tck = BSpline(self._knots, np.eye(n_bases), degree)
+        self._basis = BSpline(self._knots, np.eye(n_bases), degree)
 
     def design_matrix(self, x):
         x = np.atleast_1d(x)
-        cols = splev(x, self._tck)
+        cols = self._basis(x)
         return np.array(cols).T
 
     def __repr__(self):
