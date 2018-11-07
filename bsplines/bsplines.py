@@ -1,6 +1,6 @@
 import numpy as np
 
-from scipy.interpolate import splev
+from scipy.interpolate import splev, BSpline
 
 
 class BSplineBasis:
@@ -11,7 +11,7 @@ class BSplineBasis:
         self.degree = degree
 
         self._knots = compute_uniform_knots(lower, upper, n_bases, degree)
-        self._tck = (self._knots, np.eye(n_bases), degree)
+        self._tck = BSpline(self._knots, np.eye(n_bases), degree)
 
     def design_matrix(self, x):
         x = np.atleast_1d(x)
@@ -32,7 +32,7 @@ class QuantileBSplineBasis:
         self.degree = degree
 
         self._knots = compute_quantile_knots(lower, upper, x, n_bases, degree)
-        self._tck = (self._knots, np.eye(n_bases), degree)
+        self._tck = BSpline(self._knots, np.eye(n_bases), degree)
 
     def design_matrix(self, x):
         x = np.atleast_1d(x)
@@ -52,7 +52,7 @@ def compute_uniform_knots(lower, upper, n_bases, degree):
 
 
 def compute_quantile_knots(lower, upper, x, n_bases, degree):
-    x = x[(lower <= x) & (x <= upper)]    
+    x = x[(lower <= x) & (x <= upper)]
     n = n_interior_knots(n_bases, degree)
     p = np.percentile(x, np.linspace(0, 100, n + 2))
     k = [lower] + list(p[1:-1]) + [upper]
